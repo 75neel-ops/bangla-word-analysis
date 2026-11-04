@@ -2,8 +2,8 @@
   "version": 1,
   "note": "Starter routing map only. Update these 1-based PDF page ranges to match your scans. ranges are broad examples, not an OCR-generated index.",
   "volumes": {
-    "part1": { "label": "প্রথম খণ্ড", "pages": 829 },
-    "part2": { "label": "দ্বিতীয় খণ্ড", "pages": 813 }
+    "part1": { "label": "প্রথম খণ্ড", "pages": 829, "url": "" },
+    "part2": { "label": "দ্বিতীয় খণ্ড", "pages": 813, "url": "" }
   },
   "letters": {
     "অ": { "part": "part1", "pages": [52, 829] },
@@ -54,3 +54,4 @@
     "য়": { "part": "part2", "pages": [35, 813] }
   }
 }
+
