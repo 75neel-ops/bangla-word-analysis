@@ -1,7 +1,7 @@
 {
-  "name": "Kalim Khan Digital Dictionary",
-  "short_name": "Kalim Khan অভিধান",
-  "description": "কলিম খান ও রবি চক্রবর্তীর বাংলা শব্দার্থকোষের ডিজিটাল অনুসন্ধান",
+  "name": "Bangla Word Analysis",
+  "short_name": "বাংলা শব্দ",
+  "description": "ওয়েব সূত্রসহ বাংলা শব্দের গঠন, ব্যুৎপত্তি ও অর্থ বিশ্লেষণ",
   "lang": "bn",
   "start_url": "./",
   "scope": "./",
@@ -14,3 +14,4 @@
     { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ]
 }
+
