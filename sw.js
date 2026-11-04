@@ -1,4 +1,4 @@
-const CACHE = 'kkdd-shell-v3';
+const CACHE = 'kkdd-shell-v4';
 const CORE = ['./', './index.html', './manifest.json', './index.json', './icon.svg', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE))));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key))))));
