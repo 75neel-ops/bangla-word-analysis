@@ -21,6 +21,14 @@ Streamlit app-এর public URL-টি itch.io project description-এ দিন
 
 Streamlit Community Cloud app-টি public হলে URL-টি যে কেউ খুলতে পারে; itch.io purchase নিজে Streamlit app-এ access control যোগ করে না. Shared Gemini key-র ব্যবহারের Google AI project quota/billing limit সেট করুন.
 
+## Branded desktop shortcut
+
+The GitHub Pages launcher uses this repository's book icon and embeds the Streamlit app. After deploying the Streamlit app, set its public URL in streamlit-config.js, for example:
+
+window.BWA_STREAMLIT_URL = "https://your-app-name.streamlit.app";
+
+Then open the GitHub Pages address ending in /launcher.html and install it from the browser's app/install menu. The launcher keeps the book icon while the Streamlit server continues to hold the Gemini secret.
+
 ## Local development
 
 1. Python environment-এ pip install -r requirements.txt চালান.

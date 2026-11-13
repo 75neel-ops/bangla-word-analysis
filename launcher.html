@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#182c44">
+  <meta name="description" content="বাংলা শব্দ বিশ্লেষণ">
+  <title>বাংলা শব্দ বিশ্লেষণ</title>
+  <link rel="manifest" href="streamlit-launcher.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <style>
+    :root{font-family:'Segoe UI','Noto Sans Bengali',sans-serif;color:#1d2e42;background:#f7f4ee}
+    *{box-sizing:border-box}body{margin:0;height:100vh;display:flex;flex-direction:column}
+    header{height:58px;flex:none;display:flex;align-items:center;gap:12px;padding:8px 18px;background:#faf8f3;border-bottom:1px solid #e8e2d7}
+    header img{width:38px;height:38px;border-radius:9px}header strong{font-size:15px}
+    main{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:24px}
+    #setup{max-width:520px;text-align:center;line-height:1.7;color:#64717b}
+    #setup h1{color:#182c44;font-size:25px}#setup code{background:#eee8de;padding:2px 5px;border-radius:4px}
+    #app{display:none;border:0;width:100%;height:100%;background:#f7f4ee}
+    #open{display:none;border:0;background:#8c3949;color:white;text-decoration:none;padding:11px 17px;border-radius:9px;margin-top:14px}
+    @media(max-width:600px){header{height:52px}main{padding:0}}
+  </style>
+</head>
+<body>
+  <header><img src="icon-192.png" alt=""><strong>বাংলা শব্দ বিশ্লেষণ</strong></header>
+  <main>
+    <section id="setup">
+      <h1>বাংলা শব্দ বিশ্লেষণ</h1>
+      <p>Streamlit app-এর URL এখনো সেট করা হয়নি। App deploy করার পরে <code>streamlit-config.js</code>-এ URL যোগ করুন।</p>
+    </section>
+    <iframe id="app" title="বাংলা শব্দ বিশ্লেষণ"></iframe>
+    <a id="open" target="_blank" rel="noopener noreferrer">Streamlit app নতুন tab-এ খুলুন</a>
+  </main>
+  <script src="streamlit-config.js"></script>
+  <script>
+    (function(){
+      var value=String(window.BWA_STREAMLIT_URL||"").trim();
+      if(!value)return;
+      var url;
+      try{url=new URL(value)}catch(e){return}
+      if(url.protocol!=="https:"||!url.hostname.endsWith(".streamlit.app"))return;
+      url.searchParams.set("embed","true");
+      var frame=document.getElementById("app");
+      var setup=document.getElementById("setup");
+      var open=document.getElementById("open");
+      frame.src=url.toString();
+      frame.style.display="block";
+      setup.style.display="none";
+      open.href=value;
+      open.style.display="inline-block";
+    })();
+  </script>
+</body>
+</html>
