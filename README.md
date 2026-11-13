@@ -12,5 +12,19 @@
 
 GitHub Pages-এ প্রকাশ করতে `index.html`, `manifest.json`, `sw.js`, এবং icon ফাইলগুলো repository root-এ রাখুন; Settings → Pages-এ `main` branch ও `/(root)` বেছে নিন। Service worker/PWA HTTPS বা localhost-এ কাজ করে, `file://` থেকে নয়।
 
+
+## itch.io-তে API key গোপন রাখা
+
+itch.io build-এ সরাসরি Gemini API key রাখবেন না। HTML/JavaScript থেকে খেলোয়াড়রা সেটি বের করতে পারে। এই repository-তে থাকা Cloudflare Worker-টি server-side proxy হিসেবে ব্যবহার করুন; key Cloudflare-এর encrypted Worker Secret-এ থাকবে। Worker-এ প্রতি IP-তে ৮টি বিশ্লেষণ/মিনিটের আনুমানিক rate limit আছে। এটি abuse কমায়, তবে global spend cap নয়; Google AI project-এর quota/billing limit-ও নির্ধারণ করুন।
+
+একবার publisher হিসেবে সেটআপ করুন:
+
+1. Cloudflare account-এ Worker deploy করুন: cloudflare-worker ফোল্ডারে গিয়ে npx wrangler login চালান, তারপর npx wrangler secret put GEMINI_API_KEY দিয়ে Gemini key দিন এবং npx wrangler deploy চালান।
+2. cloudflare-worker/wrangler.toml-এর ALLOWED_ORIGINS-এ আপনার itch.io game-এর origin যোগ করুন। itch.io iframe-এর জন্য https://html-classic.itch.zone এবং আপনার game page-এর origin, যেমন https://75neel-ops.itch.io, রাখুন। নিজের game URL অনুযায়ী মানটি বদলান।
+3. Deploy শেষে Wrangler যে workers.dev URL দেখায়, সেটি api-config.js-এর BWA_API_ENDPOINT-এ বসান।
+4. index.html এবং api-config.js-সহ game files itch.io-তে upload করুন। Endpoint সেট থাকলে API key field লুকানো থাকবে; খেলোয়াড়দের কোনো key লিখতে হবে না।
+
+নিজের GitHub Pages preview-তে endpoint ফাঁকা রাখলে আগের ব্যক্তিগত API key mode চালু থাকবে। Worker source বা api-config.js-এ কখনও Gemini key লিখবেন না। Cloudflare Secrets key-টিকে server-side রাখে: https://developers.cloudflare.com/workers/configuration/secrets/ . Rate limit-এর সীমাবদ্ধতা: https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/ .
+
 Created & Maintained by NilanjanC
 
