@@ -1,0 +1,16 @@
+{
+  "name": "বাংলা শব্দ বিশ্লেষণ",
+  "short_name": "বাংলা শব্দ",
+  "description": "ওয়েব সূত্রসহ বাংলা শব্দের গঠন, ব্যুৎপত্তি ও অর্থ বিশ্লেষণ",
+  "lang": "bn",
+  "start_url": "./launcher.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f4ee",
+  "theme_color": "#182c44",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
