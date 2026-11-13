@@ -37,7 +37,7 @@ SCHEMA = {
     "required": list(PROPERTIES),
 }
 
-st.set_page_config(page_title="বাংলা শব্দ বিশ্লেষণ", page_icon="icon-192.png", layout="wide")
+st.set_page_config(page_title="বাংলা শব্দ বিশ্লেষণ", page_icon="icon.svg", layout="wide")
 st.markdown(
     """
     <style>
