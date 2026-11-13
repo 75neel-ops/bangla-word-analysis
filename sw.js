@@ -1,5 +1,5 @@
-const CACHE = 'bangla-analysis-v2';
-const CORE = ['./', './index.html', './api-config.js', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png'];
+const CACHE = 'bangla-analysis-v3';
+const CORE = ['./', './index.html', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE))));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key))))));
 self.addEventListener('fetch', event => {
