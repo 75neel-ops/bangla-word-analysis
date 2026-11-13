@@ -24,16 +24,14 @@
   <section class="hero"><div class="eyebrow">ওয়েব সূত্রসহ ভাষা বিশ্লেষণ</div><h1>শব্দের গঠন ও অর্থ বুঝুন</h1><p>বাংলা শব্দ লিখুন। গঠন, ব্যুৎপত্তি, অর্থ, পদ ও ধ্বনিগত দিক একসঙ্গে দেখুন। বিশ্লেষণে অনিশ্চয়তা থাকলে তা স্পষ্টভাবে জানানো হবে।</p><div class="credit">CREATED &amp; MAINTAINED BY <b>NILANJANC</b></div></section>
   <form class="search-card" id="searchForm"><div class="search-icon">⌕</div><input id="query" type="search" placeholder="একটি বাংলা শব্দ লিখুন…" autocomplete="off" aria-label="বাংলা শব্দ অনুসন্ধান"><button class="clear" type="button" id="clearBtn" aria-label="Clear search">×</button><button class="search-btn" type="submit">বিশ্লেষণ&nbsp; →</button></form>
   <div class="hint"><span><b>উদাহরণ:</b> আলো, অন্বেষণ, বিদ্যালয়</span><span>উত্তর পেতে ইন্টারনেট প্রয়োজন</span></div>
-  <div class="keypanel" id="keyPanel"><label for="apiKey">Gemini API key</label><div class="keyhelp"><input id="apiKey" type="password" placeholder="AIza…" autocomplete="off"><div class="keynote">ব্যক্তিগত ব্যবহারে key এই browser-এ থাকে; প্রকাশিত game-এর জন্য API proxy configure করুন।</div></div><button class="smallbtn" id="saveKey" type="button">সংরক্ষণ</button></div><div class="keypanel" id="proxyPanel" hidden><div class="keyhelp"><b>সুরক্ষিত AI সংযোগ সক্রিয়</b><div class="keynote">API key publisher-এর server-এ সুরক্ষিত থাকে। এখানে key দেওয়ার প্রয়োজন নেই।</div></div></div>
+  <div class="keypanel"><label for="apiKey">Gemini API key</label><div class="keyhelp"><input id="apiKey" type="password" placeholder="AIza…" autocomplete="off"><div class="keynote">কীটি শুধু এই browser-এর localStorage-এ থাকে; অনুরোধে সরাসরি Google-এ পাঠানো হয়।</div></div><button class="smallbtn" id="saveKey" type="button">সংরক্ষণ</button></div>
   <div class="loader" id="loader"><span class="spinner"></span><span id="loadingText">ওয়েব সূত্র খোঁজা ও বিশ্লেষণ চলছে…</span></div>
   <section class="result-wrap" id="results" aria-live="polite"></section>
 </main>
 <footer class="credits">বাংলা ভাষা ও শব্দের প্রতি শ্রদ্ধায়<span class="bengali">Created &amp; Maintained by <strong>NilanjanC</strong></span></footer>
 <div class="notice" id="notice" role="status"></div>
-<script src="api-config.js"></script>
 <script>
 (()=>{
-  const API_ENDPOINT=String(window.BWA_API_ENDPOINT||'').replace(/\/$/,'');
   const $=s=>document.querySelector(s);
   const fieldList=[
     ['letter_analysis','বর্ণ বিশ্লেষণ'],
@@ -57,7 +55,7 @@
   function toast(msg){const n=$('#notice');n.textContent=msg;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),2800)}
   function saveKey(){localStorage.setItem('bwa-gemini-key',$('#apiKey').value.trim());toast('API key এই ব্রাউজারে সংরক্ষিত হয়েছে')}
   function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-  async function lookup(word){let key='';let proxyJson=null;if(API_ENDPOINT){const proxyRes=await fetch(`${API_ENDPOINT}/analyze`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({word})});try{proxyJson=await proxyRes.json()}catch(e){throw Error('API server থেকে সঠিক উত্তর পাওয়া যায়নি।')}if(!proxyRes.ok)throw Error(proxyJson.error||`API server failed (${proxyRes.status})`)}else{key=$('#apiKey').value.trim()||localStorage.getItem('bwa-gemini-key');if(!key)throw Error('ব্যক্তিগত ব্যবহারে Gemini API key লিখুন, অথবা publisher-এর API proxy configure করুন।')}
+  async function lookup(word){const key=$('#apiKey').value.trim()||localStorage.getItem('bwa-gemini-key');if(!key)throw Error('আগে Gemini API key লিখে সংরক্ষণ করুন।');
     const prompt=`বাংলা শব্দ “${word}”-এর একটি স্বতন্ত্র, সূত্র-সমর্থিত ভাষাতাত্ত্বিক বিশ্লেষণ তৈরি করুন। Google Search ব্যবহার করে একাধিক নির্ভরযোগ্য বাংলা অভিধান, বাংলা একাডেমি/বিশ্ববিদ্যালয়/ভাষাবিজ্ঞান সূত্র যেখানে পাওয়া যায় যাচাই করুন। সব ব্যাখ্যা সহজ বাংলায় লিখুন এবং JSON schema-র প্রতিটি ঘর পূরণ করুন।
 বিশ্লেষণের নিয়ম:
 - বর্ণ বিশ্লেষণে বানানের অক্ষর, কারচিহ্ন ও যুক্তবর্ণ আলাদা করে দেখান; বানানভুল ধরে নিলে জানান।
@@ -70,7 +68,8 @@
 - কোনো নির্দিষ্ট লেখক, অভিধান বা ব্যক্তির নাম/পদ্ধতির নামে উত্তর দেবেন না; ব্যাখ্যাটি নিজস্ব ও সূত্রনির্ভর রাখুন।
 - শুধু JSON ফেরত দিন। প্রতিটি ঘরে তথ্য না থাকলে সংক্ষেপে কী জানা যায়নি বলুন।`;
     const body={model:'gemini-3.8-flash',input:prompt,tools:[{type:'google_search'}],generation_config:{thinking_level:'low'},response_format:{type:'text',mime_type:'application/json',schema}};
-    let res,json;if(API_ENDPOINT){res={ok:true,status:200};json=proxyJson}else{res=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify(body)});try{json=await res.json()}catch(e){throw Error('Google API থেকে সঠিক JSON উত্তর পাওয়া যায়নি।')}}
+    const res=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify(body)});
+    let json;try{json=await res.json()}catch(e){throw Error('Google API থেকে সঠিক JSON উত্তর পাওয়া যায়নি।')}
     if(!res.ok)throw Error(json.error?.message||(typeof json.error==='string'?json.error:`Gemini request failed (${res.status})`));
     let text='',sources=[];for(const step of (json.steps||[])){if(step.type==='model_output')for(const block of (step.content||[])){if(block.type==='text'){text+=block.text||'';for(const a of (block.annotations||[]))if(a.type==='url_citation'&&a.url)sources.push({url:a.url,title:a.title||new URL(a.url).hostname})}}}
     if(!text)text=(json.outputs||[]).filter(x=>x.type==='text').map(x=>x.text||'').join('')||json.output_text||'';
@@ -81,7 +80,7 @@
     $('#results').innerHTML=`<article class="result"><div class="result-head"><div><div class="word">${esc(word)}</div><span class="badge">ওয়েব-সূত্রভিত্তিক বিশ্লেষণ</span><span class="badge green">${esc(d.pronunciation||'উচ্চারণ অনির্দিষ্ট')}</span></div></div><div class="result-grid">${cards}</div>${sources}</article>`;
   }
   async function search(word){if(!word.trim())return;$('#results').innerHTML='';document.body.classList.add('loading');try{render(await lookup(word.trim()))}catch(e){$('#results').innerHTML=`<div class="empty">${esc(e.message)}<br>API key, ইন্টারনেট সংযোগ ও Google AI Studio-তে key access পরীক্ষা করুন।</div>`}finally{document.body.classList.remove('loading')}}
-  $('#searchForm').addEventListener('submit',e=>{e.preventDefault();search($('#query').value)});$('#clearBtn').onclick=()=>{$('#query').value='';$('#results').innerHTML='';$('#query').focus()};$('#saveKey').onclick=saveKey;const savedKey=localStorage.getItem('bwa-gemini-key')||localStorage.getItem('kkdd-gemini-key')||'';$('#apiKey').value=savedKey;if(savedKey&&!localStorage.getItem('bwa-gemini-key'))localStorage.setItem('bwa-gemini-key',savedKey);$('#apiKey').addEventListener('change',saveKey);if(API_ENDPOINT){$('#keyPanel').hidden=true;$('#proxyPanel').hidden=false;}
+  $('#searchForm').addEventListener('submit',e=>{e.preventDefault();search($('#query').value)});$('#clearBtn').onclick=()=>{$('#query').value='';$('#results').innerHTML='';$('#query').focus()};$('#saveKey').onclick=saveKey;const savedKey=localStorage.getItem('bwa-gemini-key')||localStorage.getItem('kkdd-gemini-key')||'';$('#apiKey').value=savedKey;if(savedKey&&!localStorage.getItem('bwa-gemini-key'))localStorage.setItem('bwa-gemini-key',savedKey);$('#apiKey').addEventListener('change',saveKey);
   if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 })();
 </script>
