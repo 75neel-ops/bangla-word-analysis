@@ -1,30 +1,36 @@
 # বাংলা শব্দ বিশ্লেষণ
 
-ওয়েব-সূত্রভিত্তিক বাংলা শব্দ বিশ্লেষণের একটি responsive single-page app ও installable PWA। শব্দের বর্ণ, প্রকৃতি/মূল, উপসর্গ, প্রত্যয়, অনুসর্গ, উৎপত্তি, অর্থ, প্রসঙ্গভিত্তিক সমার্থক ও বিপরীতার্থক শব্দ, সন্ধি, পদ-প্রকরণ এবং ক্রিয়া-ভিত্তিক ও বর্ণ-ভিত্তিক ব্যাখ্যা দেখায়। কোনো বিশ্লেষণ প্রযোজ্য না হলে বা সূত্রে নিশ্চিত না হলে সেটি স্পষ্ট করে।
+ওয়েব-সূত্রভিত্তিক বাংলা শব্দ বিশ্লেষণের Streamlit app। বর্ণ, প্রকৃতি/মূল, উপসর্গ, প্রত্যয়, উৎপত্তি, অর্থ, প্রসঙ্গভিত্তিক সমার্থক ও বিপরীতার্থক শব্দ, সন্ধি, পদ-প্রকরণ এবং ব্যাখ্যার নির্ভরযোগ্যতার সীমা দেখায়।
 
-## ব্যবহার
+## Streamlit-এ প্রকাশ (shared API key)
 
-1. HTTPS-এ প্রকাশিত অ্যাপ খুলুন অথবা স্থানীয় preview-এর জন্য এই ফোল্ডার থেকে `python -m http.server 8000` চালিয়ে `http://localhost:8000` খুলুন।
-2. Gemini API key লিখুন ও সংরক্ষণ করুন। key শুধু ওই browser-এর local storage-এ থাকে; অনুরোধে সরাসরি Google-এ পাঠানো হয়। অন্য ব্যবহারকারীর key আপনার সঙ্গে ভাগ হয় না।
-3. একটি বাংলা শব্দ লিখে অনুসন্ধান করুন। অ্যাপ Gemini Search grounding দিয়ে ওয়েবের সূত্র খোঁজে এবং পাওয়া citation-গুলো দেখায়।
+এই সংস্করণে Gemini অনুরোধ Python/Streamlit server থেকে যায়। খেলোয়াড়ের browser-এ API key পাঠানো হয় না।
 
-অ্যাপটি Google Interactions API-তে `gemini-3.8-flash` ও Google Search grounding ব্যবহার করে। এটি নির্ভরযোগ্য সূত্র দেখানোর চেষ্টা করে, কিন্তু ব্যুৎপত্তি বা ভাষাতাত্ত্বিক বিশ্লেষণ প্রকাশের আগে উৎসে যাচাই করা উচিত। API key কখনও public GitHub repository-তে যোগ করবেন না।
+1. Streamlit Community Cloud-এ Create app বেছে এই repository, main branch, এবং streamlit_app.py entrypoint নির্বাচন করুন.
+2. Deploy করার সময় Advanced settings → Secrets-এ নিজের key দিয়ে এই TOML যোগ করুন:
 
-GitHub Pages-এ প্রকাশ করতে `index.html`, `manifest.json`, `sw.js`, এবং icon ফাইলগুলো repository root-এ রাখুন; Settings → Pages-এ `main` branch ও `/(root)` বেছে নিন। Service worker/PWA HTTPS বা localhost-এ কাজ করে, `file://` থেকে নয়।
+   GEMINI_API_KEY = "your-gemini-api-key"
 
+3. Deploy করুন। পরে key পরিবর্তন করতে app-এর Settings → Secrets-এ যান.
 
-## itch.io-তে API key গোপন রাখা
+Streamlit Secrets স্থানীয়ভাবে .streamlit/secrets.toml থেকে পড়া যায়; প্রকৃত secrets ফাইলটি .gitignore-এ আছে। Repository-তে শুধু .streamlit/secrets.toml.example নমুনা রাখা হয়েছে. [Streamlit Secrets guide](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/secrets-management)
 
-itch.io build-এ সরাসরি Gemini API key রাখবেন না। HTML/JavaScript থেকে খেলোয়াড়রা সেটি বের করতে পারে। এই repository-তে থাকা Cloudflare Worker-টি server-side proxy হিসেবে ব্যবহার করুন; key Cloudflare-এর encrypted Worker Secret-এ থাকবে। Worker-এ প্রতি IP-তে ৮টি বিশ্লেষণ/মিনিটের আনুমানিক rate limit আছে। এটি abuse কমায়, তবে global spend cap নয়; Google AI project-এর quota/billing limit-ও নির্ধারণ করুন।
+## itch.io
 
-একবার publisher হিসেবে সেটআপ করুন:
+Streamlit app-এর public URL-টি itch.io project description-এ দিন. Streamlit public apps support iframe embedding with ?embed=true; itch.io game page-এ সেটি কাজ করে কি না upload-এর পরে যাচাই করুন. itch.io HTML game embed নিজেই iframe ব্যবহার করে, তাই সবচেয়ে নির্ভরযোগ্য fallback হলো Streamlit app-টি নতুন tab-এ খোলার link দেওয়া.
 
-1. Cloudflare account-এ Worker deploy করুন: cloudflare-worker ফোল্ডারে গিয়ে npx wrangler login চালান, তারপর npx wrangler secret put GEMINI_API_KEY দিয়ে Gemini key দিন এবং npx wrangler deploy চালান।
-2. cloudflare-worker/wrangler.toml-এর ALLOWED_ORIGINS-এ আপনার itch.io game-এর origin যোগ করুন। itch.io iframe-এর জন্য https://html-classic.itch.zone এবং আপনার game page-এর origin, যেমন https://75neel-ops.itch.io, রাখুন। নিজের game URL অনুযায়ী মানটি বদলান।
-3. Deploy শেষে Wrangler যে workers.dev URL দেখায়, সেটি api-config.js-এর BWA_API_ENDPOINT-এ বসান।
-4. index.html এবং api-config.js-সহ game files itch.io-তে upload করুন। Endpoint সেট থাকলে API key field লুকানো থাকবে; খেলোয়াড়দের কোনো key লিখতে হবে না।
+Streamlit Community Cloud app-টি public হলে URL-টি যে কেউ খুলতে পারে; itch.io purchase নিজে Streamlit app-এ access control যোগ করে না. Shared Gemini key-র ব্যবহারের Google AI project quota/billing limit সেট করুন.
 
-নিজের GitHub Pages preview-তে endpoint ফাঁকা রাখলে আগের ব্যক্তিগত API key mode চালু থাকবে। Worker source বা api-config.js-এ কখনও Gemini key লিখবেন না। Cloudflare Secrets key-টিকে server-side রাখে: https://developers.cloudflare.com/workers/configuration/secrets/ . Rate limit-এর সীমাবদ্ধতা: https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/ .
+## Local development
+
+1. Python environment-এ pip install -r requirements.txt চালান.
+2. .streamlit/secrets.toml.example-এর অনুরূপ .streamlit/secrets.toml তৈরি করে key দিন.
+3. streamlit run streamlit_app.py চালান.
+
+## Static preview
+
+Root-এর index.html পুরোনো static preview হিসেবে রাখা আছে। সেটি browser থেকে সরাসরি Google-এ request করে এবং প্রত্যেক user-এর নিজস্ব API key চায়. Shared publisher key ও itch.io release-এর জন্য Streamlit app deploy করুন.
+
+অ্যাপটি Google Interactions API-তে gemini-3.8-flash ও Google Search grounding ব্যবহার করে। ব্যুৎপত্তি বা ভাষাতাত্ত্বিক বিশ্লেষণ প্রকাশের আগে সূত্রে যাচাই করুন.
 
 Created & Maintained by NilanjanC
-
