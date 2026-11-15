@@ -65,17 +65,25 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+@st.dialog("অনুদান করুন", width="large")
+def donation_dialog() -> None:
+    st.write("আপনার অনুদান বাংলা শব্দ বিশ্লেষণ টুলটির রক্ষণাবেক্ষণ ও উন্নতিতে সাহায্য করবে।")
+    components.html(
+        '<form><script src="https://checkout.razorpay.com/v1/payment-button.js" '
+        'data-payment_button_id="pl_Tvez6NOZsFJFmN" async></script></form>',
+        height=620,
+        scrolling=True,
+    )
+
+
 with st.container(border=True):
     st.subheader("বাংলা ভাষার কাজে পাশে থাকুন 💛")
     st.write(
         "এই বাংলা শব্দ বিশ্লেষণ টুলটি আপনার কাজে লাগলে, এর রক্ষণাবেক্ষণ ও উন্নতিতে "
         "অনুদান দিয়ে সাহায্য করুন। আপনার সহায়তা আমাদের এই উদ্যোগ চালিয়ে যেতে অনুপ্রাণিত করবে।"
     )
-    components.html(
-        '<form><script src="https://checkout.razorpay.com/v1/payment-button.js" '
-        'data-payment_button_id="pl_Tvez6NOZsFJFmN" async></script></form>',
-        height=120,
-    )
+    if st.button("💛 অনুদান করুন", type="primary", use_container_width=True):
+        donation_dialog()
 
 
 def build_prompt(word: str) -> str:
