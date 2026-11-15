@@ -50,6 +50,8 @@ st.markdown(
       .eyebrow { color:#8c3949; font-weight:700; letter-spacing:1px; }
       .hero h1 { font-family:'Noto Serif Bengali',serif; }
       .muted { color:#777c80; }
+      .donation-card { background:#fffefa; border:1px solid #e8e2d7; border-left:3px solid #d7a84b; border-radius:12px; padding:.75rem .85rem; margin:.5rem 0 .35rem; }
+      .donation-card p { color:#777c80; font-size:.9rem; line-height:1.5; margin:.35rem 0 0; }
       div[data-testid="stForm"] { background:#fffefa; border:1px solid #e8e2d7; border-radius:16px; padding:1rem; }
       div[data-testid="stVerticalBlockBorderWrapper"] { background:#fffefa; border-color:#eee8de; }
       a { color:#355c7e !important; }
@@ -76,13 +78,13 @@ def donation_dialog() -> None:
     )
 
 
-with st.container(border=True):
-    st.subheader("বাংলা ভাষার কাজে পাশে থাকুন 💛")
-    st.write(
-        "এই বাংলা শব্দ বিশ্লেষণ টুলটি আপনার কাজে লাগলে, এর রক্ষণাবেক্ষণ ও উন্নতিতে "
-        "অনুদান দিয়ে সাহায্য করুন। আপনার সহায়তা আমাদের এই উদ্যোগ চালিয়ে যেতে অনুপ্রাণিত করবে।"
+with st.sidebar:
+    st.markdown(
+        '<div class="donation-card"><strong>💛 বাংলা ভাষার পাশে</strong>'
+        '<p>টুলটি কাজে লাগলে, ছোট অনুদানে এর রক্ষণাবেক্ষণ ও উন্নতিতে সহায়তা করুন।</p></div>',
+        unsafe_allow_html=True,
     )
-    if st.button("💛 অনুদান করুন", type="primary", use_container_width=True):
+    if st.button("অনুদান করুন", key="donate", use_container_width=True):
         donation_dialog()
 
 
