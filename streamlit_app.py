@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 
 import requests
 import streamlit as st
+import streamlit.components.v1 as components
 
 MODEL = "gemini-3.8-flash"
 API_URL = "https://generativelanguage.googleapis.com/v1beta/interactions"
@@ -63,6 +64,19 @@ st.markdown(
     '<p class="muted">Created &amp; Maintained by NilanjanC</p></div>',
     unsafe_allow_html=True,
 )
+
+with st.container(border=True):
+    st.subheader("বাংলা ভাষার কাজে পাশে থাকুন 💛")
+    st.write(
+        "এই বাংলা শব্দ বিশ্লেষণ টুলটি আপনার কাজে লাগলে, এর রক্ষণাবেক্ষণ ও উন্নতিতে "
+        "অনুদান দিয়ে সাহায্য করুন। আপনার সহায়তা আমাদের এই উদ্যোগ চালিয়ে যেতে অনুপ্রাণিত করবে।"
+    )
+    components.html(
+        '<form><script src="https://checkout.razorpay.com/v1/payment-button.js" '
+        'data-payment_button_id="pl_Tvez6NOZsFJFmN" async></script></form>',
+        height=120,
+    )
+
 
 def build_prompt(word: str) -> str:
     return f"""বাংলা শব্দ “{word}”-এর একটি স্বতন্ত্র, সূত্র-সমর্থিত ভাষাতাত্ত্বিক বিশ্লেষণ তৈরি করুন। Google Search ব্যবহার করে একাধিক নির্ভরযোগ্য বাংলা অভিধান, বাংলা একাডেমি/বিশ্ববিদ্যালয়/ভাষাবিজ্ঞান সূত্র যেখানে পাওয়া যায় যাচাই করুন। সব ব্যাখ্যা সহজ বাংলায় লিখুন এবং JSON schema-র প্রতিটি ঘর পূরণ করুন।
